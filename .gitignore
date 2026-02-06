@@ -1,0 +1,17 @@
+# python cache
+__pycache__/
+*.pyc
+
+# system files
+.DS_Store
+
+# large data files
+*.csv
+*.h5
+*.tar.gz
+data/
+
+# BU SCC log files
+*.log
+*.out
+*.err
