@@ -125,7 +125,7 @@ class BassetBranched(nn.Module):
         conv2_channels=200, conv2_kernel_size=11, conv3_channels=200,
         conv3_kernel_size=7, n_linear_layers=1, linear_channels=1000,
         linear_activation='ReLU', linear_dropout_p=0.11625456877954289,
-        n_branched_layers=3, branched_channels=250, branched_activation='ReLU',
+        n_branched_layers=3, branched_channels=140, branched_activation='ReLU',
         branched_dropout_p=0.5757068086404574, n_outputs=3, use_batch_norm=True,
         use_weight_norm=False, loss_criterion='L1KLmixed', loss_args=None
     ):

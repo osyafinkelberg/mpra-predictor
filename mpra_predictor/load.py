@@ -9,10 +9,22 @@ from . import classifier as classifier_module
 DATA_DIR = Path(__file__).resolve().parents[1] / "data"
 
 
-def load_model_structure(PARAM_CONFIG: dict[str, str | dict[str, tp.Any]]) -> classifier_module.FusedClassifier:
-    sei_base = sei_module.load_pretrained_weights(
-        weights_path=DATA_DIR / "sei_model/sei.pth", model_cls=sei_module.SeiWithoutSpline, freeze=True,
-    )
+def load_model_structure(
+    PARAM_CONFIG: dict[str, str | dict[str, tp.Any]],
+    load_pretrained_base_weights: bool = False,
+) -> classifier_module.FusedClassifier:
+
+    if load_pretrained_base_weights:
+        sei_base = sei_module.load_pretrained_weights(
+            weights_path=DATA_DIR / "sei_model/sei.pth", model_cls=sei_module.SeiWithoutSpline, freeze=True,
+        )
+        mal_base = malinois_module.load_pretrained_weights(
+            DATA_DIR / "malinois_model/artifacts", model_cls=malinois_module.MalinoisEncoder, freeze=True,
+        )
+    else:
+        sei_base = sei_module.SeiWithoutSpline()
+        mal_base = malinois_module.MalinoisEncoder()
+
     sei_pooler = pooler_module.PositionWeight(
         channels=sei_base.out_channels,
         seq_len=sei_base.out_length,
@@ -22,9 +34,6 @@ def load_model_structure(PARAM_CONFIG: dict[str, str | dict[str, tp.Any]]) -> cl
         dropout=PARAM_CONFIG['sei_pooler']['dropout'],
     )
 
-    mal_base = malinois_module.load_pretrained_weights(
-        DATA_DIR / "malinois_model/artifacts", malinois_module.MalinoisEncoder, freeze=True,
-    )
     mal_pooler = pooler_module.PositionWeight(
         channels=mal_base.out_channels,
         seq_len=mal_base.out_length,

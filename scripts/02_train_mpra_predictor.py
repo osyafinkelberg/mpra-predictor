@@ -35,7 +35,7 @@ if __name__ == "__main__":
     dataset_valid = dataset.filter(pl.col("split") == "val")
     TARGETS = CONFIG['target_columns']
 
-    model = mpra_predictor.load.load_model_structure(CONFIG).to(DEVICE)
+    model = mpra_predictor.load.load_model_structure(CONFIG, load_pretrained_base_weights=True).to(DEVICE)
     model.to(DEVICE)
 
     weights_path = OUTPUT_DIR / f"{str(model)}.pt"
