@@ -211,7 +211,7 @@ def preprocess_ol53() -> None:
     # match to OL49
     ol53_formatted = ol53_formatted.with_columns(
         pl.when(pl.col('project').str.starts_with('viral_'))
-        .then(pl.col('ID_OL49').str.split(':').list.slice(0, -1).list.join(':'))
+        .then(pl.col('ID_OL49').str.replace("_", ":").str.split(':').list.slice(0, 4).list.join(":"))
         .otherwise(pl.col('ID_OL49'))
         .alias('ID_OL49')
     )
