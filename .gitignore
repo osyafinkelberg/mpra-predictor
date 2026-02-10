@@ -1,17 +1,14 @@
-# python cache
-__pycache__/
-*.pyc
-
-# system files
-.DS_Store
-
-# large data files
-*.csv
-*.h5
-*.tar.gz
-data/
-
-# BU SCC log files
-*.log
+.idea/
+.vscode/
+**/__pycache__/
+*.py[cod]
+*.ipynb_checkpoints/
+*.pytest_cache
+*.mypy_cache
+*.cache
 *.out
 *.err
+*.csv
+*.txt
+*.gz
+data/
