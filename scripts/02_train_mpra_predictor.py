@@ -23,14 +23,16 @@ if __name__ == "__main__":
         'mal_pooler': {'n_heads': 1, 'hidden_dim': 64, 'pos_emb_dim': 8, 'dropout': 0.5, },
         'fusion': {'output_dim': 128, 'dropout': 0.7},
         'mlp': {'hidden_size': 128, 'num_res_blocks': 0, 'dropout': 0.5},
-        'target_columns': ['lfc_mean_Jurkat',],
-        # 'target_columns': [
-        #     'lfc_mean_GM12878', 'lfc_mean_Jurkat', 'lfc_mean_MRC5',
-        #     'lfc_mean_A549', 'lfc_mean_HEK293', 'lfc_mean_K562'
-        # ]
+        # 'target_columns': ['lfc_mean_Jurkat',],
+        'target_columns': [
+            'lfc_mean_GM12878', 'lfc_mean_Jurkat', 'lfc_mean_MRC5',
+            'lfc_mean_A549', 'lfc_mean_HEK293', 'lfc_mean_K562'
+        ]
     }
 
     dataset = pl.read_csv(DATA_DIR / "OL49.csv")
+    # lo_quant, hi_quant = dataset["dna_mean"].quantile(.1), dataset["dna_mean"].quantile(.9)
+    # dataset = dataset.filter((pl.col("dna_mean") >= lo_quant) & (pl.col("dna_mean") <= hi_quant))
     dataset_train = dataset.filter(pl.col("split") == "train")
     dataset_valid = dataset.filter(pl.col("split") == "val")
     TARGETS = CONFIG['target_columns']
