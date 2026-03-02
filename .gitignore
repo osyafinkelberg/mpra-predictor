@@ -12,3 +12,5 @@
 *.txt
 *.gz
 data/
+*followup-*
+notebooks/test.ipynb
