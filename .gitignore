@@ -14,3 +14,4 @@
 data/
 *followup-*
 notebooks/test.ipynb
+scripts/*.sh
