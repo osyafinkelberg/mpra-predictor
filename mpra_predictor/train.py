@@ -64,6 +64,43 @@ def r2_score_with_nans(
         return r2.detach().cpu().item()
 
 
+def pcc_score_with_nans(
+    preds: torch.Tensor, targets: torch.Tensor, per_target: bool = False
+) -> float | list[float]:
+    # PCC: cov(x,y) / (std(x) * std(y))
+    if per_target:
+        pcc_scores = []
+        for i in range(targets.shape[1]):
+            target_col = targets[:, i]
+            pred_col = preds[:, i]
+            mask = torch.isfinite(target_col)
+            target_clean = target_col[mask]
+            pred_clean = pred_col[mask]
+
+            if target_clean.numel() < 2:
+                pcc_scores.append(float("nan"))
+                continue
+
+            vx = pred_clean - torch.mean(pred_clean)
+            vy = target_clean - torch.mean(target_clean)
+            pcc = torch.sum(vx * vy) / (torch.sqrt(torch.sum(vx ** 2) * torch.sum(vy ** 2)).clamp(min=1e-8))
+            pcc_scores.append(pcc.detach().cpu().item())
+        return pcc_scores
+
+    else:
+        mask = torch.isfinite(targets)
+        preds_clean = preds[mask]
+        targets_clean = targets[mask]
+
+        if targets_clean.numel() < 2:
+            return float("nan")
+
+        vx = preds_clean - torch.mean(preds_clean)
+        vy = targets_clean - torch.mean(targets_clean)
+        pcc = torch.sum(vx * vy) / (torch.sqrt(torch.sum(vx ** 2) * torch.sum(vy ** 2)).clamp(min=1e-8))
+        return pcc.detach().cpu().item()
+
+
 def train_mpra_predictor(
     model,
     train_loader: DataLoader,
